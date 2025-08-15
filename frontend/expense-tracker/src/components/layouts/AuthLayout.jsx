@@ -3,45 +3,66 @@ import CARD_2 from "../../assets/images/card2.png";
 import { LuTrendingUpDown } from "react-icons/lu";
 
 const AuthLayout = ({ children }) => {
-  return  <div className="flex">
-    <div className="w-screen h-screen md:w-[60vw] px-12 pt-8 pb-12">
-        <h2 className="text-lg font-extrabold text-black">Biz Track</h2>
-        {children}
-    </div>
-    <div className="hidden md:block w-[40vw] h-screen bg-violet-50 bg-auth-bg-img bg-cover bg-no-repeat bg-center overflow-hidden p-8 relative">
-        <div className="w-48 h-48 rounded-[40px] bg-purple-600 absolute -top-7 -left-5"/>
-        <div className="w-48 h-56 rounded-[40px] border-[20px] border-fuchsia-600 absolute top-[30%] -right-10"/>
-        <div className="w-48 h-48 rounded-[40px] bg-violet-500 absolute -bottom-7 -left-5"/>
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Left Section */}
+      <div className="w-full md:w-[60%] px-12 pt-8 pb-12 flex flex-col">
+        <h2 className="text-4xl font-bold text-gray-800 tracking-tight">
+          Biz <span className="text-primary">Track</span>
+        </h2>
+        <p className="text-gray-800 mt-4 mb-8 text-md">
+          Smart tracking for your business income, expenses & growth.
+        </p>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-full max-w-md">{children}</div>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 z-20">
-            <StatsInfoCard
-                icon={<LuTrendingUpDown/>}
-                label="Track Your Income & Expenses"
-                value="430,000"
-                color="bg-primary"
-                />
+      {/* Right Section */}
+      <div className="hidden md:flex w-[40%] bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 relative p-8 overflow-hidden">
+        {/* Decorative Elements */}
+        <div className="absolute w-64 h-64 bg-white/10 rounded-[40px] -top-12 -left-10 blur-xl" />
+        <div className="absolute w-48 h-48 border-[20px] border-white/30 rounded-[40px] top-[25%] -right-8" />
+        <div className="absolute w-56 h-56 bg-white/10 rounded-[40px] -bottom-10 -left-8 blur-lg" />
+
+        {/* Stats Card */}
+        <div className="absolute top-16 left-12 z-[50] ">
+        <StatsInfoCard
+         icon={<LuTrendingUpDown />}
+        label="Track Your Income & Expenses"
+        value="430000"
+        color="bg-gradient-to-r from-indigo-500 to-purple-500"
+        />
         </div>
 
-        <img 
-            src={CARD_2}
-            className="w-64 lg:w-[90%] absolute bottom-10 shadow-lg shadow-blue-400/15"
-            />
-         </div>
-     </div>;
+
+        {/* Image */}
+        <img
+          src={CARD_2}
+          alt="Business Card"
+          className="absolute bottom-22 right-8 w-64 lg:w-[85%] rounded-2xl shadow-xl shadow-black/30 z-10"
+        />
+      </div>
+    </div>
+  );
 };
 
 export default AuthLayout;
 
-const StatsInfoCard = ({icon, label, value, color}) =>{
-    return <div className="flex gap-6 bg-white p-4 rounded-xl shadow-md shadow-purple-400/10 border border-gray-200/50 z-10">
-        <div
-            className= {`w-12 h-12 flex items-center justify-center text-[26px] text-white ${color} rounded-full drop-shadow-xl`}
-            >
-                {icon}
-            </div>
-            <div>
-                <h6 className="text-xs text-gray-500 mb-1">{label}</h6>
-                <span className="text-[20px] ">${value}</span>
-            </div>
+const StatsInfoCard = ({ icon, label, value, color }) => {
+  return (
+    <div className="flex items-center gap-5 bg-white/90 backdrop-blur-sm p-5 rounded-2xl shadow-lg border border-white/30 hover:shadow-xl transition-shadow duration-300">
+      <div
+        className={`w-14 h-14 flex items-center justify-center text-[28px] text-white ${color} rounded-full shadow-lg`}
+      >
+        {icon}
+      </div>
+      <div>
+        <h6 className="text-md font-medium text-gray-500">{label}</h6>
+        <span className="text-xl font-bold text-gray-800">
+          ${Number(value).toLocaleString()}
+        </span>
+      </div>
     </div>
-}
+  );
+};
