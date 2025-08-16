@@ -60,41 +60,24 @@ const Login = () => {
             value={password}
             onChange={({ target }) => setPassword(target.value)}
             label="Password"
-            placeholder="••••••••"
+            placeholder="Min 8 Character"
             type="password"
           />
 
-          {error && (
-            <p className="text-red-500 text-sm font-medium">{error}</p>
-          )}
-
-          <div className="flex items-center justify-between">
-            <label className="flex items-center text-sm text-gray-600">
-              <input
-                type="checkbox"
-                className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-              />
-              <span className="ml-2">Remember me</span>
-            </label>
-            <Link
-              to="/forgot-password"
-              className="text-sm font-medium text-primary hover:underline"
-            >
-              Forgot Password?
-            </Link>
-          </div>
-
+          {error && 
+            <p className="text-red-500 text-sm font-medium">{error}</p>}
+          
           <button
             type="submit"
-            className="w-full py-3 px-4 bg-gradient-to-r from-primary to-purple-500 text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:opacity-90 transition duration-200"
+            className="btn-primary"
           >
             LOGIN
           </button>
 
-          <p className="text-center text-sm text-gray-700 mt-4">
+          <p className="text-[13px] text-slate-800 mt-3">
             Don’t have an account?{" "}
             <Link
-              className="font-medium text-primary hover:underline"
+              className="font-medium text-primary underline"
               to="/signup"
             >
               Sign up

@@ -1,48 +1,61 @@
-import React, { useState } from "react";
-import {FaRegEye, FaRegEyeSlash} from "react-icons/fa6"
+import React, { useState, forwardRef } from "react";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
-const Input = ({value, onChange, placeholder, label, type}) => {
+const Input = forwardRef(
+  ({ value, onChange, placeholder, label, type, className = "" }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-  return (
-    <div>
-        <label className="text-[15px] font-bold text-slate-800">{label}</label>
+    const toggleShowPassword = () => {
+      setShowPassword(!showPassword);
+    };
 
-        <div className="input-box">
-            <input
-                type={type == 'password' ? showPassword ? 'text' : 'password' : type}
-                placeholder={placeholder}
-                className="w-full bg-transparent outline-none"
-                value={value}
-                onChange={(e) => onChange(e)}
+    return (
+      <div className={`${className === "hidden" ? "hidden" : ""}`}>
+        {label && (
+          <label className="text-[15px] font-bold text-slate-800">
+            {label}
+          </label>
+        )}
+
+        <div className="input-box flex items-center">
+          <input
+            ref={ref}
+            type={
+              type === "password"
+                ? showPassword
+                  ? "text"
+                  : "password"
+                : type
+            }
+            placeholder={placeholder}
+            className={`w-full bg-transparent outline-none ${
+              className !== "hidden" ? "" : ""
+            }`}
+            value={value}
+            onChange={(e) => onChange?.(e)}
+          />
+
+          {type === "password" && (
+            <>
+              {showPassword ? (
+                <FaRegEye
+                  size={22}
+                  className="text-primary cursor-pointer"
+                  onClick={toggleShowPassword}
                 />
-
-            {type === "password" && (
-                <>
-                {showPassword ? (
-                    <FaRegEye
-                        size={22}
-                        className="text-primary cursor-pointer"
-                        onClick={() => toggleShowPassword()}
-                        />
-                ): (
-                    <FaRegEyeSlash
-                        size={22}
-                        className="text-slate-400 cursor-pointer"
-                        onClick={() => toggleShowPassword()}
-                        />
-                
-            )}
+              ) : (
+                <FaRegEyeSlash
+                  size={22}
+                  className="text-slate-400 cursor-pointer"
+                  onClick={toggleShowPassword}
+                />
+              )}
             </>
-            )}
+          )}
         </div>
-    </div>
-  ) 
-};
-
-
+      </div>
+    );
+  }
+);
 
 export default Input;
