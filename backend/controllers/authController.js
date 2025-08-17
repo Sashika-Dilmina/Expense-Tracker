@@ -1,57 +1,87 @@
-
-const User = require('../models/User')
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
-//generate JWT token
+// Generate JWT token
 const generateToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRET, { expiresIn: "1h"});
-}
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+};
 
 // Register User
 exports.registerUser = async (req, res) => {
-  const { fullName, email, password ,profileImageUrl } = req.body;
+  try {
+    const { fullName, email, password, profileImageUrl } = req.body;
 
-  //validation : check for missing fields
-  if (!fullName || !email || !password) {
-    return res.status(400).json( {message: "All fields are required"})
-}
+    if (!fullName || !email || !password) {
+      return res
+        .status(400)
+        .json({ message: "fullName, email, and password are required" });
+    }
 
- try {
-    // check if email already exists
-    const exisingUser = await User.findOne({ email });
+    // Check if email already exists
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-        return res.status(400).json({ message: "Email already in use"});
+      return res.status(400).json({ message: "Email already in use" });
     }
 
     // Create the user
     const user = await User.create({
-        fullName,
-        email,
-        password,
-        profileImageUrl,
+      fullName,
+      email,
+      password,
+      profileImageUrl,
     });
 
-    res.status(201).json({
-        id: user._id,
-        user,
-        token: generateToken(user._id)
+    return res.status(201).json({
+      message: "User registered successfully",
+      id: user._id,
+      user,
+      token: generateToken(user._id),
     });
- } catch (err) {
-    res
+  } catch (err) {
+    console.error("registerUser error:", err);
+    return res
       .status(500)
-      .json({ message: "Error registering user", error: err.message});
-      }
- 
+      .json({ message: "Error registering user", error: err.message });
+  }
 };
 
 // Login User
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
-  res.json({ message: "User logged in", data: { email } });
+  if (!email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+  try {
+    const user = await User.findOne({ email });
+    if (!user || !(await user.comparePassword(password))) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+    res.status(200).json({
+      id: user._id,
+      user,
+      token: generateToken(user._id),
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error logging in user", error: err.message });
+  }
 };
 
-//
-exports.loginUser = async (req, res) => {
-  const { email, password } = req.body;
-  res.json({ message: "User logged in", data: { email } });
+// Get User Info (using req.user from Protect middleware)
+exports.getUserInfo = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      id: req.user._id,
+      fullName: req.user.fullName,  // match your schema
+      email: req.user.email,
+      profileImageUrl: req.user.profileImageUrl || null,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 };

@@ -2,7 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
+
 const authRoutes = require("./routes/authRoutes");
+const path = require("path");
+
+
 
 const app = express();
 
@@ -12,7 +16,9 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-app.use(express.json());
+app.use(express.json());                         // for application/json
+app.use(express.urlencoded({ extended: true })); // for x-www-form-urlencoded
+
 
 // Connect to MongoDB
 connectDB().then(() => console.log("MongoDB connected")).catch(err => {
@@ -27,6 +33,9 @@ app.use("/api/v1/auth", authRoutes);
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
+
+// Serve upload folder
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Start server
 const PORT = process.env.PORT || 5000;
