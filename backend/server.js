@@ -2,9 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
-
 const authRoutes = require("./routes/authRoutes");
 const path = require("path");
+const connectDB = require("./config/db");
+const authRoutes = require("./routes/authRoutes");
+const incomeRoutes = require("./routes/incomeRoutes");
+
 
 
 
@@ -16,7 +19,9 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-app.use(express.json());                         // for application/json
+app.use(express.json());   
+
+// for application/json
 app.use(express.urlencoded({ extended: true })); // for x-www-form-urlencoded
 
 
@@ -28,6 +33,7 @@ connectDB().then(() => console.log("MongoDB connected")).catch(err => {
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/income", incomeRoutes);
 
 // Test route
 app.get("/", (req, res) => {
