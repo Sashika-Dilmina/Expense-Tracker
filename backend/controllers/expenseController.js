@@ -80,18 +80,19 @@ exports.downloadExpenseExcel = async (req, res) => {
     const expenses = await Expense.find({ user }).sort({ date: -1 });
 
     const data = expenses.map((item) => ({
-      category: item.category,
-      amount: item.amount,
+      Category: item.category,
+      Amount: item.amount,
       Date: item.date,
-      
     }));
 
     const wb = xlsx.utils.book_new();
     const ws = xlsx.utils.json_to_sheet(data);
     xlsx.utils.book_append_sheet(wb, ws, "Expenses");
-    xlsx.writeFile(wb, "expense_details.xlsx");
 
-    res.download("expense_details.xlsx");
+    const filePath = "expense_details.xlsx";
+    xlsx.writeFile(wb, filePath);
+
+    res.download(filePath);
   } catch (error) {
     res.status(500).json({
       message: "Server Error",
