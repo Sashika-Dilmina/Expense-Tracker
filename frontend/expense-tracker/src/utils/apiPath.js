@@ -1,4 +1,4 @@
-import Expense from "../../../../backend/models/Expense";
+//import Expense from "../../../../backend/models/Expense";
 
 export const BASE_URL = "http://localhost:5000/api/v1";
 

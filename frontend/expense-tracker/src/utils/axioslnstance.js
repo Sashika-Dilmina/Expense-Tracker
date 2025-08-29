@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "./apiPath";
-import { base } from "../../../../backend/models/User";
-import { head } from "../../../../backend/routes/authRoutes";
+//import { base } from "../../../../backend/models/User";
+//simport { head } from "../../../../backend/routes/authRoutes";
 
 
 const axiosInstance = axios.create({
