@@ -12,11 +12,13 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 const app = express();
 
 // Middleware
-app.use(cors({
+app.use(
+  cors({
   origin: process.env.CLIENT_URL || "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
-}));
+})
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,16 +33,16 @@ connectDB()
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/income", incomeRoutes);
-app.use("/api/v1/expense", expenseRoutes);
+app.use("/api/v1/income", require("./routes/incomeRoutes"));
+app.use("/api/v1/expense", require("./routes/expenseRoutes"));
 app.use("/api/v1/dashboard", dashboardRoutes);
 
 // Test route
-app.get("/", (req, res) => res.send("API is running..."));
+app.get("/ping", (req, res) => res.send("API is running..."));
 
 // Serve uploads
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT || 3000;
+app.listen(5000, () => console.log(`Server running on port ${PORT}`));

@@ -5,8 +5,8 @@ const { Protect } = require("../middleware/authMiddleware");
 const router = express.Router();
 
 // Routes with Protect middleware
-router.post("/", Protect, addIncome);
-router.get("/", Protect, getAllIncome);
+router.post("/add", Protect, addIncome);
+router.get("/get", Protect, getAllIncome);
 router.delete("/:id", Protect, deleteIncome);
 router.get("/downloadexcel", Protect, downloadIncomeExcel); 
 

@@ -2,7 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 // Generate JWT token
-const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
 // Register User
 exports.registerUser = async (req, res) => {
@@ -47,7 +47,9 @@ exports.loginUser = async (req, res) => {
       token: generateToken(user._id)
     });
   } catch (err) {
-    res.status(500).json({ message: "Error logging in user", error: err.message });
+    res
+    .status(500)
+    .json({ message: "Error logging in user", error: err.message });
   }
 };
 
