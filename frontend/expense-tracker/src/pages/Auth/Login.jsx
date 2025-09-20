@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import AuthLayout from "../../components/layouts/AuthLayout";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
-import {validateEmail} from "../../utils/helper";
-import axiosInstance from "../../utils/axioslnstance";
-import { API_PATHS } from "../../utils/apiPath";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,9 +10,9 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  // Email validation function
+  // Inline email validation
   const validateEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   };
 
   // Handle Login form Submit
@@ -34,33 +31,31 @@ const Login = () => {
 
     setError("");
 
-    //  Login API call 
-
-
-    try{
-      const response = await axiosInstance.post(API_PATHS .AUTH.LOGIN, {
-        email,
-        password,
+    try {
+      const response = await fetch("http://localhost:5000/api/v1/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), password })
       });
-      const { token } = response.data;
-       if (token) {
-        localStorage.setItem("token", token);
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Save token to localStorage
+        localStorage.setItem("token", data.token);
+        // Navigate to dashboard
         navigate("/dashboard");
-       }
-      } catch (error) {
-        if (error.response && error.response.data.message) {
-          setError(error.response.data.message);
-        } else {
-          setError("Something went wrong. Please try again.");
-        }
+      } else {
+        setError(data.message || "Login failed");
       }
-     
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    }
   };
 
   return (
     <AuthLayout>
       <div className="lg:w-[80%] md:w-[90%] w-full flex flex-col justify-center min-h-full px-6">
-        {/* Title */}
         <h3 className="text-2xl font-bold text-gray-900 tracking-tight">
           Welcome Back
         </h3>
@@ -68,7 +63,6 @@ const Login = () => {
           Sign in to continue tracking your business performance.
         </p>
 
-        {/* Login Form */}
         <form onSubmit={handleLogin} className="space-y-6">
           <Input
             value={email}
@@ -86,22 +80,15 @@ const Login = () => {
             type="password"
           />
 
-          {error && 
-            <p className="text-red-500 text-sm font-medium">{error}</p>}
-          
-          <button
-            type="submit"
-            className="btn-primary"
-          >
+          {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
+
+          <button type="submit" className="btn-primary">
             LOGIN
           </button>
 
           <p className="text-[13px] text-slate-800 mt-3">
             Don’t have an account?{" "}
-            <Link
-              className="font-medium text-primary underline"
-              to="/signup"
-            >
+            <Link className="font-medium text-primary underline" to="/signup">
               Sign up
             </Link>
           </p>
