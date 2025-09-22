@@ -1,23 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import AuthLayout from "../../components/layouts/AuthLayout";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
-
+import { UserContext } from "../../context/UserContext"; // <-- import
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  
 
+  const { updateUser, login: loginContext } = useContext(UserContext); // <-- get from context
   const navigate = useNavigate();
 
-  // Inline email validation
   const validateEmail = (email) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   };
 
-  // Handle Login form Submit
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -45,7 +43,12 @@ const Login = () => {
       if (response.ok) {
         // Save token to localStorage
         localStorage.setItem("token", data.token);
-        updateUser( user );
+
+        // Update user context with user data from backend
+        if (data.user) {
+          updateUser(data.user); // or loginContext(data.user)
+        }
+
         // Navigate to dashboard
         navigate("/dashboard");
       } else {

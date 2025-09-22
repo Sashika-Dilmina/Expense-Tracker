@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import Navbar from "../../components/layouts/Navbar";
-import SideMenu from "../../components/layouts/SideMenu";
+import SideMenu from './SideMenu';
 
 const DashboardLayout = ({ children, activeMenu }) => {
   const { user } = useContext(UserContext);
+  
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -12,13 +13,10 @@ const DashboardLayout = ({ children, activeMenu }) => {
       <Navbar activeMenu={activeMenu} />
 
       <div className="flex">
-        {/* ✅ SideMenu only visible if user exists */}
-        {user && (
-          <div className="max-[1080px]:hidden">
-            <SideMenu activeMenu={activeMenu} />
-          </div>
-        )}
-
+        {/* Remove user check for debugging */}
+        <div className="w-64 bg-white min-h-screen shadow-md">
+          <SideMenu activeMenu={activeMenu} />
+        </div>
         <div className="grow mx-5">{children}</div>
       </div>
     </div>

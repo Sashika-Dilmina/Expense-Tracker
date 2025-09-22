@@ -12,7 +12,7 @@ const Input = forwardRef(
     return (
       <div className={`${className === "hidden" ? "hidden" : ""}`}>
         {label && (
-          <label className="text-[15px] font-bold text-slate-800">
+          <label className="text-[15px] font-bold text-slate-800"> 
             {label}
           </label>
         )}
