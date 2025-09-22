@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
 import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
 
+
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null);
   const [fullName, setFullName] = useState("");
@@ -40,6 +41,13 @@ const SignUp = () => {
     setError(""); 
     
     try {
+
+      //upload image if prsent
+      if (profilePic){
+        const imgUploadRes = await uploadImage(profilePic);
+        profileImageUrl = imgUploadRes.imageUrl ||"";
+      }
+      
       const response = await fetch("http://localhost:5000/api/v1/auth/register", { // replace with your backend API
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -3,10 +3,12 @@ import AuthLayout from "../../components/layouts/AuthLayout";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
 
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  
 
   const navigate = useNavigate();
 
@@ -43,6 +45,7 @@ const Login = () => {
       if (response.ok) {
         // Save token to localStorage
         localStorage.setItem("token", data.token);
+        updateUser( user );
         // Navigate to dashboard
         navigate("/dashboard");
       } else {
@@ -68,7 +71,7 @@ const Login = () => {
             value={email}
             onChange={({ target }) => setEmail(target.value)}
             label="Email Address"
-            placeholder="sashika@example.com"
+            placeholder="inuka@example.com"
             type="email"
           />
 
